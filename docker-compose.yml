@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  db:
+    image: mysql-emsquared
+    ports:
+      - "3306:3306"
+    volumes:
+      - /var/lib/mysql-docker:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: fubar
+  pma:
+    depends_on:
+      - db
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - "127.0.0.1:7000:80"
+    environment:
+      PMA_USER: root
+      PMA_PASSWORD: fubar
+  php:
+    depends_on:
+      - db
+    image: docker-php-emsquared
+    ports:
+      - "80:80"
+    volumes:
+      - ./src/www:/var/www/html
